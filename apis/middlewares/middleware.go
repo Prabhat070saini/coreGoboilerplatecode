@@ -3,8 +3,8 @@ package middleware
 import (
 	"github.com/example/testing/config"
 	"github.com/example/testing/shared/cache/cacheConfig"
-	"github.com/example/testing/common/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/example/testing/common/response"
 )
 
 type Middlewares struct {
@@ -31,7 +31,7 @@ func NewMiddlewares(cfg *config.Env, cacheService cacheConfig.Cache) *Middleware
 }
 
 func SendErrorResponse(ctx *gin.Context, code int, message string, status int) {
-	ctx.AbortWithStatusJSON(status, constants.ApiResponse[any]{
+	ctx.AbortWithStatusJSON(status, response.ApiResponse[any]{
 		Code:    code,
 		Message: message,
 	})

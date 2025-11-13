@@ -2,6 +2,7 @@ package initializer
 
 import (
 	"github.com/example/testing/shared/cache/cacheConfig"
+	file "github.com/example/testing/shared/fileSystem"
 
 	httpClient "github.com/example/testing/common/lib/http"
 	"github.com/example/testing/config"
@@ -15,7 +16,7 @@ type BaseService struct {
 	AuthService authService.AuthServiceMethods
 }
 
-func NewBaseService(cacheService cacheConfig.Cache, cfg *config.Env, baseRepo *BaseRepository, db *gorm.DB, httpService *httpClient.HttpClientImpl) *BaseService {
+func NewBaseService(cacheService cacheConfig.Cache, cfg *config.Env, baseRepo *BaseRepository, db *gorm.DB, httpService *httpClient.HttpClientImpl,fileService *file.FileService) *BaseService {
 	userServiceAccess := userService.NewUserServiceAccess(cacheService, cfg, db)
 	// Services
 	authServiceAccess := authService.NewAuthServiceAccess(cacheService, cfg, httpService)

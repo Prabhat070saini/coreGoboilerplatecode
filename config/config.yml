@@ -22,7 +22,7 @@ jwt:
   access_token_secret: access_token_secret
   refresh_token_secret: refresh_token_secret
 log:
-  level: "debug" # options: debug, info, warn, error
+  level: "info" # options: debug, info, warn, error
   format: "console" # options: json, console
   enable_caller: true
   enable_stacktrace: false

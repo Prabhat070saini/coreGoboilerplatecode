@@ -12,6 +12,7 @@ import (
 	middleware "github.com/example/testing/apis/middlewares"
 	"github.com/example/testing/apis/routes"
 	"github.com/example/testing/common/constants"
+	httpClient "github.com/example/testing/common/lib/http"
 	"github.com/example/testing/common/lib/logger"
 	"github.com/example/testing/common/validator"
 	"github.com/example/testing/config"
@@ -19,7 +20,8 @@ import (
 	"github.com/example/testing/shared/cache"
 	"github.com/example/testing/shared/cache/cacheConfig"
 	"github.com/example/testing/shared/database"
-httpClient	"github.com/example/testing/common/lib/http"
+	fileSystem "github.com/example/testing/shared/fileSystem"
+	"github.com/example/testing/shared/fileSystem/fileConfig"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -32,6 +34,7 @@ type App struct {
 	db           *gorm.DB
 	cacheService cacheConfig.Cache
 	repo         *initializer.BaseRepository
+	fileService  *fileSystem.FileService
 	service      *initializer.BaseService
 	handler      *initializer.BaseHandler
 	httpService  *httpClient.HttpClientImpl
@@ -50,10 +53,10 @@ func (a *App) initialize() {
 
 	// Initialize logger
 	logger.Init(logger.LogConfig{
-		Level:            "debug",
-		Format:           "console",
-		EnableCaller:     true,
-		EnableStacktrace: false,
+		Level:            a.cfg.Log.Level,
+		Format:           a.cfg.Log.Format,
+		EnableCaller:     a.cfg.Log.EnableCaller,
+		EnableStacktrace: a.cfg.Log.EnableStacktrace,
 		RequestIDKey:     constants.RequestIDKey,
 	})
 
@@ -84,9 +87,9 @@ func (a *App) initialize() {
 	// Connect Redis
 	cacheConfiguration := &cacheConfig.Config{
 		Driver:   a.cfg.Cache.Driver,
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
+		Addr:     a.cfg.Cache.Addr,
+		Password: a.cfg.Cache.Password,
+		DB:       a.cfg.Cache.Db,
 	}
 	cacheConnection, err := cache.Init(cacheConfiguration)
 	if err != nil {
@@ -101,6 +104,23 @@ func (a *App) initialize() {
 	})
 	a.httpService = httpService
 
+	s3Cfg := fileConfig.S3Config{
+		Region:          a.cfg.S3.Region,
+		AccessKeyID:     a.cfg.S3.AccessKeyID,
+		SecretAccessKey: a.cfg.S3.SecretAccessKey,
+		BucketName:      a.cfg.S3.BucketName,
+		SignedURLExpiry: a.cfg.S3.SignedURLExpiry,
+		MaxFileSize:     int64(a.cfg.S3.MaxFileSize), // 5MB
+	}
+
+	_, fileErr := fileSystem.Initialize(fileSystem.S3, s3Cfg)
+	if fileErr != nil {
+		panic(fileErr)
+	}
+
+	fs := fileSystem.GetInstance()
+	a.fileService = fs
+
 	// Init Router
 	a.router = gin.Default()
 	a.middleware = middleware.NewMiddlewares(a.cfg, a.cacheService)
@@ -109,7 +129,7 @@ func (a *App) initialize() {
 	a.router.Use(a.middleware.SecurityMiddleware.SecurityHeadersMiddleware(a.cfg.AppEnv))
 
 	a.repo = initializer.NewBaseRepository(a.db, a.cacheService, a.cfg)
-	a.service = initializer.NewBaseService(a.cacheService, a.cfg, a.repo, a.db, a.httpService)
+	a.service = initializer.NewBaseService(a.cacheService, a.cfg, a.repo, a.db, a.httpService,a.fileService)
 	a.handler = initializer.NewBaseHandler(a.cfg, a.service)
 
 	routes.NewRoutes(a.router, a.cfg, a.handler, a.middleware)

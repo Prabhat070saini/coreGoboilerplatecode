@@ -27,3 +27,9 @@ type FunctionOutput[T any] struct {
 	Data      T          `json:"data,omitempty"`
 	Exception *Exception  `json:"exception,omitempty"`
 }
+
+type ApiResponse[T any] struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    T      `json:"data"`
+}
