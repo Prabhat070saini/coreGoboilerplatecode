@@ -1,0 +1,123 @@
+ServerPort: 3001
+AppName: "boilerplate-code"
+ApiKey: "afhw9yt092qb3wr7bewb" #need to add
+AppVersion: "0.0.1"
+BaseUrl: "http://localhost:3000"
+Environment: development # development, stagging, uat, prod
+db:
+  driver: postgres
+  host: localhost
+  port: 5432
+  user: prabhat
+  password: "prabhat"
+  db_name: ge_verona
+  max_idle_connection: 10
+  max_open_connection: 50
+  conn_max_lifetime_minutes: 30
+  logging: "true"
+  ssl_mode: "disable"
+jwt:
+  access_token_expiry_min: 5
+  refresh_token_expiry_min: 24
+  access_token_secret: access_token_secret
+  refresh_token_secret: refresh_token_secret
+log:
+  level: "debug" # options: debug, info, warn, error
+  format: "console" # options: json, console
+  enable_caller: true
+  enable_stacktrace: false
+cache:
+  driver: redis
+  addr: "localhost:6379"
+  password: JDdjnkjHvf@6732#
+  db: 0
+  REDIS_CONNECTION_LIMIT: 50
+  USE_REDIS: false
+
+aws:
+  aws_region: us-east-1
+  aws_access_key_id: AKIAVYU3F7BN7GPUWGJ5
+  aws_secret_access_key: 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
+  aws_s3_bucket_name: testing-taiservices
+  aws_signed_url_expiry: 3600 #minute
+  max_file_size: 52428800 #50MB
+cors:
+  allow_origins:
+    - "http://localhost:5173"
+    - "http://localhost:3000"
+    - "http://127.0.0.1:5500"
+    - "http://localhost:5500"
+  allow_methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+  allow_headers:
+    - Origin
+    - Content-Type
+    - Accept
+    - Authorization
+    - x-api-key
+    - reset-token
+    - refresh-token
+  expose_headers:
+    - Content-Length
+  allow_credentials: true
+  max_age_hours: 12
+email:
+  host: smtp.gmail.com
+  port: 465
+  username: "info@binmile.com"
+  password: "onuhknrvamwklusf"
+  from: "info@binmile.com" #TruemedsTest
+  provider: "smtp"
+# local host ***************************************************************************************************************************************************************
+
+# ServerPort: 3000
+# AppName: "tm-auth-service"
+# AppVersion: "0.0.1"
+# BaseUrl: "http://localhost:3000"
+# Environment: development # development, stagging, uat, prod
+# db:
+#   host: localhost
+#   port: 5432
+#   user: prabhat
+#   password: prabhat
+#   db_name: GO
+#   max_idle_connection: 10
+#   max_open_connection: 50
+#   conn_max_lifetime_minutes: 30
+#   logging: "true"
+# jwt:
+#   access_token_expiry_min: 120
+#   refresh_token_expiry_min: 360
+#   access_token_secret: access_token_secret
+#   refresh_token_secret: refresh_token_secret
+# log:
+#   level: "info" # options: debug, info, warn, error
+#   format: "json" # options: json, console
+#   enable_caller: true
+#   enable_stacktrace: false
+# redis:
+#   addr: "localhost:6379"
+#   password: JDdjnkjHvf@6732#
+#   db: 0
+
+# aws:
+#   aws_region: ap-south-1
+#   aws_access_key_id: AKIAVYU3F7BN7GPUWGJ5
+#   aws_secret_access_key: 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
+#   aws_s3_bucket_name: doctor-docx
+#   aws_signed_url_expiry: 15 #minute
+#   max_file_size: 52428800 #50MB
+
+service_base_url:
+  communication_service: http://3.109.216.121:3002/communication-service
+
+password_reset:
+  reset_link: "http://15.206.117.252:3000/reset-password/"
+  reset_link_expiry_min: 5
+
+crypto: #need to add
+  aes_key: 7fB9c2E4q6W8r3T5y7U9w2Z4s8a6K0dH
