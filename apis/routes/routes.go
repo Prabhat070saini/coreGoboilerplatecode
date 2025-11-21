@@ -45,5 +45,5 @@ func NewRoutes(router *gin.Engine, cfg *config.Env, baseHandler *initializer.Bas
 	// 5️⃣  Example for future modular routes
 	// -------------------------------
 	v1.NewAuthRoutes(baseHandler, appRoutes, middlewares)
-	// v1.NewFileRoutes(baseHandler, appRoutes)
+	v1.NewFileRoutes(baseHandler, appRoutes, middlewares)
 }

@@ -1,19 +1,27 @@
-package fileserviceaccess
+package fileServiceAccess
 
-// import (
-	
-// 	file "github.com/Prabhat7saini/bmt-lib/pkg/fileSystem"
 
-// )
+import (
+	httpClient "github.com/example/testing/common/lib/http"
+	"github.com/example/testing/config"
+	"github.com/example/testing/shared/cache/cacheConfig"
+	fileSystem "github.com/example/testing/shared/fileSystem"
 
-// type FileServiceAccess struct {
+)
 
-// 	FileService     *file.FileService
-// }
+type FileServiceAccess struct {
+	CacheService cacheConfig.Cache
+	Config       *config.Env
+	HttpService  *httpClient.HttpClientImpl
+	FileService  *fileSystem.FileService
 
-// func NewFileServiceAccess( fileService *file.FileService) *FileServiceAccess {
-// 	return &FileServiceAccess{
-	
-// 		FileService:     fileService,
-// 	}
-// }
+}
+
+func NewFileServiceAccess(cacheService cacheConfig.Cache, config *config.Env, httpService *httpClient.HttpClientImpl, fileService *fileSystem.FileService) *FileServiceAccess {
+	return &FileServiceAccess{
+		CacheService: cacheService,
+		Config:       config,
+		HttpService:  httpService,
+		FileService:  fileService,
+	}
+}

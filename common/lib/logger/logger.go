@@ -14,7 +14,7 @@ import (
 var (
 	logInstance      *zap.Logger
 	once             sync.Once
-	globalRequestCtx context.Context
+	// globalRequestCtx context.Context
 	enabledLevels    zapcore.LevelEnabler
 )
 
@@ -91,13 +91,13 @@ func getLevelEnabler(level string) zapcore.LevelEnabler {
 
 // ---- Context Management ----
 
-func SetRequestContext(ctx context.Context) {
-	globalRequestCtx = ctx
-}
+// func SetRequestContext(ctx context.Context) {
+// 	globalRequestCtx = ctx
+// }
 
-func GetRequestContext() context.Context {
-	return globalRequestCtx
-}
+// func GetRequestContext() context.Context {
+// 	return globalRequestCtx
+// }
 
 // ---- Logger Access ----
 

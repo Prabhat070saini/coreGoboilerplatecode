@@ -27,15 +27,3 @@ func GetReqContext(c *gin.Context) *RequestContext {
 	return val.(*RequestContext)
 }
 
-// Handler func type
-type ReqContextHandlerFunc func(*RequestContext, *gin.Context)
-
-// Middleware function
-func  ReqContextMiddleware(handler ReqContextHandlerFunc) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Get or create RequestContext
-		reqCtx := GetReqContext(c)
-		// Call the original handler with RequestContext
-		handler(reqCtx, c)
-	}
-}
