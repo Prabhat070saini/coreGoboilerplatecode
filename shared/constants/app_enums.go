@@ -3,7 +3,7 @@ package constants
 import (
 	"errors"
 
-	"github.com/example/testing/common/jwt"
+	"github.com/example/testing/shared/jwt"
 )
 
 

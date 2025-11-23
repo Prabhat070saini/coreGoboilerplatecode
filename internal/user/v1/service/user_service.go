@@ -3,8 +3,8 @@ package userService
 import (
 	"context"
 
-	"github.com/example/testing/common/response"
-	"github.com/example/testing/common/utils"
+	"github.com/example/testing/shared/response"
+	"github.com/example/testing/shared/utils"
 	"github.com/example/testing/internal/user/models"
 	userRepository "github.com/example/testing/internal/user/repository"
 	"gorm.io/gorm"

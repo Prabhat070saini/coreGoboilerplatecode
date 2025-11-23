@@ -3,7 +3,7 @@ package initializer
 import (
 	"github.com/example/testing/config"
 	userRepository "github.com/example/testing/internal/user/repository"
-	"github.com/example/testing/shared/cache/cacheConfig"
+	"github.com/example/testing/shared/clients/cache/cacheConfig"
 	"gorm.io/gorm"
 )
 

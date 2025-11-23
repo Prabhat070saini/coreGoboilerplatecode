@@ -16,7 +16,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/example/testing/shared/fileSystem/fileConfig"
+	"github.com/example/testing/shared/clients/fileSystem/fileConfig"
 )
 
 // s3Client implements FileProvider without logging

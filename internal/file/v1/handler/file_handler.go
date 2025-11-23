@@ -1,22 +1,19 @@
 package filehandler
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
-	// middleware "github.com/example/testing/apis/middlewares"
-	middleware "github.com/example/testing/apis/middlewares"
-	"github.com/example/testing/common/lib/logger"
-	"github.com/example/testing/common/response"
+	"github.com/example/testing/shared/response"
 	"github.com/example/testing/internal/file/v1/dto"
 	fileservice "github.com/example/testing/internal/file/v1/service/file_service"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type FileHandlerMethods interface {
-	UploadFile(ctx *gin.Context)
-	FetchFile(ctx *gin.Context)
+	UploadFile(ginCtx *gin.Context, ctx context.Context)
+	FetchFile(ginCtx *gin.Context, ctx context.Context)
 }
 
 type fileHandler struct {
@@ -27,12 +24,12 @@ func NewFileHandler(fileService fileservice.FileServiceMethods) FileHandlerMetho
 	return &fileHandler{fileService: fileService}
 }
 
-func (f *fileHandler) UploadFile(ctx *gin.Context) {
+func (f *fileHandler) UploadFile(ginCtx *gin.Context, ctx context.Context) {
 	fmt.Println("Debug: UploadFile called")
-	reqCtx := middleware.GetReqContext(ctx)
-	logger.Info(reqCtx.Ctx, "file upload endpoint called")
+	// reqCtx := middleware.GetReqContext(ctx)
+	// logger.Info(reqCtx.Ctx, "file upload endpoint called")
 	var req dto.UploadFileDto
-	ctx.ShouldBind(&req) //nolint:errcheck
+	ginCtx.ShouldBind(&req) //nolint:errcheck
 
 	// check for missing file
 	if req.File == nil {
@@ -43,7 +40,7 @@ func (f *fileHandler) UploadFile(ctx *gin.Context) {
 				HttpStatusCode: http.StatusInternalServerError,
 			},
 		}
-		response.SendRestResponse(ctx, output)
+		response.SendRestResponse(ginCtx, output)
 		return
 	}
 
@@ -56,45 +53,45 @@ func (f *fileHandler) UploadFile(ctx *gin.Context) {
 				HttpStatusCode: http.StatusInternalServerError,
 			},
 		}
-		response.SendRestResponse(ctx, output)
+		response.SendRestResponse(ginCtx, output)
 		return
 	}
 
 	// Check if folder == registration AND sessionId is missing in form fields
 	if req.Folder == "registration" {
-		if form, err := ctx.MultipartForm(); err == nil {
+		if form, err := ginCtx.MultipartForm(); err == nil {
 			if _, exists := form.Value["sessionId"]; !exists {
 				output := &response.ServiceOutput[struct{}]{
 					Exception: &response.Exception{
 						Code:           500,
 						Message:        "SessionId is required for registration folder",
 						HttpStatusCode: http.StatusInternalServerError,
-					},	
+					},
 				}
-				response.SendRestResponse(ctx, output)
+				response.SendRestResponse(ginCtx, output)
 				return
 			}
 		}
 	}
 
-	logger.Info(reqCtx.Ctx, "file upload request received", zap.String("folder", req.Folder), zap.String("filename", req.File.Filename), zap.String("session_id", req.SessionID))
+	// logger.Info(reqCtx.Ctx, "file upload request received", zap.String("folder", req.Folder), zap.String("filename", req.File.Filename), zap.String("session_id", req.SessionID))
 	// Continue to service layer
-	output := f.fileService.UploadFile(reqCtx.Ctx, &req)
-	response.SendRestResponse(ctx, &output)
+	output := f.fileService.UploadFile(ctx, &req)
+	response.SendRestResponse(ginCtx, &output)
 }
 
-func (f *fileHandler) FetchFile(ctx *gin.Context) {
-	reqCtx := middleware.GetReqContext(ctx)
+func (f *fileHandler) FetchFile(ginCtx *gin.Context, ctx context.Context) {
+	
 	var req dto.FetchFileDto
-	if err := ctx.ShouldBindQuery(&req); err != nil {
+	if err := ginCtx.ShouldBindQuery(&req); err != nil {
 		exc := dto.GetFetchFileDtoValidationError(err)
 		resp := response.ServiceOutput[struct{}]{
 			Exception: exc,
 		}
-		response.SendRestResponse(ctx, &resp)
+		response.SendRestResponse(ginCtx, &resp)
 		return
 	}
 
-	output := f.fileService.FetchFile(reqCtx.Ctx, &req)
-	response.SendRestResponse(ctx, &output)
+	output := f.fileService.FetchFile(ctx, &req)
+	response.SendRestResponse(ginCtx, &output)
 }

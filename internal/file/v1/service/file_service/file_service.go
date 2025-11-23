@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/example/testing/common/lib/logger"
-	"github.com/example/testing/common/response"
+	"github.com/example/testing/shared/lib/logger"
+	"github.com/example/testing/shared/response"
 
-	"github.com/example/testing/common/constants/exception"
-	"github.com/example/testing/common/utils"
+	"github.com/example/testing/shared/constants/exception"
+	"github.com/example/testing/shared/utils"
 	"github.com/example/testing/internal/file/v1/dto"
 	fileserviceaccess "github.com/example/testing/internal/file/v1/service"
 	"go.uber.org/zap"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/example/testing/shared/cache/cacheConfig"
+	"github.com/example/testing/shared/clients/cache/cacheConfig"
 	"github.com/redis/go-redis/v9"
 )
 

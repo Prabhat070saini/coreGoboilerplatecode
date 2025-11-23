@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/example/testing/shared/cache/cacheConfig"
-	"github.com/example/testing/shared/cache/redis"
+	"github.com/example/testing/shared/clients/cache/cacheConfig"
+	"github.com/example/testing/shared/clients/cache/redis"
 )
 
 var (

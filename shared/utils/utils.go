@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/example/testing/common/constants/exception"
-	"github.com/example/testing/common/response"
+	"github.com/example/testing/shared/constants/exception"
+	"github.com/example/testing/shared/response"
 	"gorm.io/gorm"
 )
 

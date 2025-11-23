@@ -1,10 +1,10 @@
 package initializer
 
 import (
-	"github.com/example/testing/shared/cache/cacheConfig"
-	file "github.com/example/testing/shared/fileSystem"
+	"github.com/example/testing/shared/clients/cache/cacheConfig"
+	file "github.com/example/testing/shared/clients/fileSystem"
 
-	httpClient "github.com/example/testing/common/lib/http"
+	httpClient "github.com/example/testing/shared/lib/http"
 	"github.com/example/testing/config"
 	authService "github.com/example/testing/internal/auth/v1/service"
 	fileServiceAccess "github.com/example/testing/internal/file/v1/service"

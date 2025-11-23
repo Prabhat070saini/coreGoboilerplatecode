@@ -7,8 +7,8 @@ import (
 	"mime/multipart"
 	"sync"
 
-	"github.com/example/testing/shared/fileSystem/fileConfig"
-	"github.com/example/testing/shared/fileSystem/s3"
+	"github.com/example/testing/shared/clients/fileSystem/fileConfig"
+	"github.com/example/testing/shared/clients/fileSystem/s3"
 )
 
 type ProviderType string

@@ -3,8 +3,8 @@ package dto
 import (
 	"errors"
 
-	"github.com/example/testing/common/constants/exception"
-	"github.com/example/testing/common/response"
+	"github.com/example/testing/shared/constants/exception"
+	"github.com/example/testing/shared/response"
 	"github.com/go-playground/validator/v10"
 )
 

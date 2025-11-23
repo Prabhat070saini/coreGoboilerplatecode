@@ -1,9 +1,9 @@
 package authService
 
 import (
-	httpClient "github.com/example/testing/common/lib/http"
+	httpClient "github.com/example/testing/shared/lib/http"
 	"github.com/example/testing/config"
-	"github.com/example/testing/shared/cache/cacheConfig"
+	"github.com/example/testing/shared/clients/cache/cacheConfig"
 )
 
 type AuthServiceAccess struct {

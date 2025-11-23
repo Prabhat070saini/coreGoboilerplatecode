@@ -2,7 +2,7 @@ package userRepository
 
 import (
 	"github.com/example/testing/config"
-	"github.com/example/testing/shared/cache/cacheConfig"
+	"github.com/example/testing/shared/clients/cache/cacheConfig"
 	"gorm.io/gorm"
 )
 

@@ -2,6 +2,7 @@ package v1
 
 import (
 	middleware "github.com/example/testing/apis/middlewares"
+	"github.com/example/testing/shared/constants"
 	"github.com/example/testing/internal/initializer"
 	"github.com/gin-gonic/gin"
 )
@@ -17,13 +18,13 @@ func NewFileRoutes(baseHandler *initializer.BaseHandler, routerGroup *gin.Router
 	routerGroup.POST(
 		FileGroupPrefix+"/upload",
 		middleware.AuthMiddleware.AuthMiddleware(),
-		baseHandler.FileHandler.UploadFile,
+		middleware.PermissionMiddleware.PermissionMiddleware(constants.SuperDoctor, constants.Doctor),
+		middleware.ContextInjectorMethods.InjectContext(baseHandler.FileHandler.UploadFile),
 	)
 
 	routerGroup.GET(
 		FileGroupPrefix+"/fetch",
-		// middleware.AuthMiddlewareMethods.AuthMiddleware(),
-		baseHandler.FileHandler.FetchFile,
+		middleware.ContextInjectorMethods.InjectContext(baseHandler.FileHandler.FetchFile),
 	)
 
 	return &FileRoutes{}

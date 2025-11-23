@@ -3,8 +3,8 @@ package middleware
 import (
 	"context"
 
-	"github.com/example/testing/common/lib/logger"
-	"github.com/example/testing/common/constants"
+	"github.com/example/testing/shared/lib/logger"
+	"github.com/example/testing/shared/constants"
 
 	"strings"
 	"time"

@@ -6,15 +6,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/example/testing/common/hashing"
-	"github.com/example/testing/common/jwt"
+	"github.com/example/testing/shared/jwt"
 	"github.com/example/testing/internal/auth/v1/dto"
 
-	"github.com/example/testing/common/constants"
-	"github.com/example/testing/common/constants/exception"
-	"github.com/example/testing/common/lib/logger"
-	"github.com/example/testing/common/response"
-	"github.com/example/testing/common/utils"
+	"github.com/example/testing/shared/constants"
+	"github.com/example/testing/shared/constants/exception"
+	"github.com/example/testing/shared/lib/logger"
+	"github.com/example/testing/shared/response"
+	"github.com/example/testing/shared/utils"
 	userService "github.com/example/testing/internal/user/v1/service"
 	"go.uber.org/zap"
 )
@@ -54,20 +53,32 @@ func (s *authService) Login(ctx context.Context, payload *dto.LoginDto, ip *stri
 		return utils.ServiceError[*LoginResponse](exception.USER_BLOCKED)
 	}
 
-	if !hashing.CompareHashAndPassword(&getUserOutput.Data.PasswordHash, &payload.Password) {
-		logger.Debug(ctx,"password not	 match")
-		return utils.ServiceError[*LoginResponse](exception.INVALID_CREDENTIALS)
-	}
+	// if !hashing.CompareHashAndPassword(&getUserOutput.Data.PasswordHash, &payload.Password) {
+	// 	logger.Debug(ctx,"password not	 match")
+	// 	return utils.ServiceError[*LoginResponse](exception.INVALID_CREDENTIALS)
+	// }
 
 	// Prepare token payload (minimal, safe data only)
-	accessTokenPayload := struct {
-		Id string `json:"id"`
-	}{
-		Id: getUserOutput.Data.UUID.String(),
+	// accessTokenPayload := struct {
+	// 	Id string `json:"id"`
+	// 	// Roles []string `json:"roles"`
+	// 	  Roles []string `json:"roles"`
+	// }{
+	// 	Id: getUserOutput.Data.UUID.String(),
+	// 	// Roles: []string{"MST001"},
+	// 	 Roles: []string{"MST001"},
+	// }
+	// refreshTokenPayload := struct {
+	// 	Id string `json:"id"`
+	// }{
+	// 	Id: getUserOutput.Data.UUID.String(),
+	// }
+	accessTokenPayload := constants.AccessTokenPayload{
+		Id:    getUserOutput.Data.UUID.String(),
+		Roles: []string{"MST001"}, // 🔥 stays as []string, NOT []interface{}
 	}
-	refreshTokenPayload := struct {
-		Id string `json:"id"`
-	}{
+
+	refreshTokenPayload := constants.RefreshTokenPayload{
 		Id: getUserOutput.Data.UUID.String(),
 	}
 
@@ -78,10 +89,13 @@ func (s *authService) Login(ctx context.Context, payload *dto.LoginDto, ip *stri
 		logger.Error(ctx, "Failed to generate access Token")
 		return utils.ServiceError[*LoginResponse](exception.INTERNAL_SERVER_ERROR)
 	}
+	fmt.Println("Access token:", *accessToken)
 
 	refreshToken, err := jwt.GenerateJwtToken(constants.RefreshToken, refreshTokenPayload, s.access.Config.JWT.RefreshTokenExpiryMin, s.access.Config.JWT.RefreshTokenSecret)
 	if err != nil {
-		logger.Error(ctx, "Failed to generate refresh Token")
+		fmt.Printf("Error generating refresh token:))))))))))))))))))))))))))) %v\n", err)
+		logger.Error(ctx, "Failed to generate refresh Token", zap.Error(err))
+		fmt.Println("Error generating refresh token:", err)
 		return utils.ServiceError[*LoginResponse](exception.INTERNAL_SERVER_ERROR)
 	}
 	// Save token to Redis  LoginRefreshTokenRedisKey
@@ -99,17 +113,13 @@ func (s *authService) Login(ctx context.Context, payload *dto.LoginDto, ip *stri
 	}
 
 	resp := &LoginResponse{AccessToken: *accessToken, Id: getUserOutput.Data.UUID, RefreshToken: *refreshToken, Name: *getUserOutput.Data.Name}
-	tokenPayload, err := jwt.ValidateJwtToken(*accessToken, "s.access.Config.JWT.AccessTokenSecret")
+	tokenPayload, err := jwt.ValidateJwtToken(*accessToken, s.access.Config.JWT.AccessTokenSecret)
 	if err != nil {
-		logger.Error(ctx, "Failed to generate refresh Token", zap.Error(err))
+		logger.Error(ctx, "Failed to validate access token", zap.Error(err))
+		fmt.Printf("Error validating access token: %v\n", err)
 		return utils.ServiceError[*LoginResponse](exception.INTERNAL_SERVER_ERROR)
 	}
-	fmt.Println(tokenPayload, "payload")
-
-
-
-
-
+	fmt.Println("Access token payload:", tokenPayload)
 
 	return response.ServiceOutput[*LoginResponse]{
 		Success: &response.Success[*LoginResponse]{

@@ -3,11 +3,12 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
-	"github.com/example/testing/common/jwt"
-	"github.com/example/testing/common/lib/logger"
-	"github.com/example/testing/common/constants"
-	"github.com/example/testing/common/constants/exception"
+	"github.com/example/testing/shared/constants"
+	"github.com/example/testing/shared/constants/exception"
+	"github.com/example/testing/shared/jwt"
+	"github.com/example/testing/shared/lib/logger"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -25,6 +26,21 @@ func NewAuthMiddleware(access *MiddlewareAccess) AuthMiddlewareMethods {
 		access: access,
 	}
 }
+func toStringSlice(val interface{}) []string {
+	raw, ok := val.([]interface{})
+	if !ok {
+		return nil
+	}
+
+	result := make([]string, 0, len(raw))
+	for _, v := range raw {
+		if s, ok := v.(string); ok {
+			result = append(result, strings.ToUpper(s)) // normalize
+		}
+	}
+	return result
+}
+
 func (m *authMiddleware) AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -65,7 +81,7 @@ func (m *authMiddleware) AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 		if roles, exists := payload["roles"]; exists {
-			c.Set("roles", roles)
+			c.Set("roles", toStringSlice(roles)) // 🔥 always []string
 		}
 		c.Set("userId", userId)
 

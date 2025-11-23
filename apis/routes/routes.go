@@ -3,7 +3,7 @@ package routes
 import (
 	"time"
 
-	"github.com/example/testing/common/lib/logger"
+	"github.com/example/testing/shared/lib/logger"
 	middleware "github.com/example/testing/apis/middlewares"
 	v1 "github.com/example/testing/apis/routes/v1"
 	"github.com/example/testing/config"
@@ -30,6 +30,7 @@ func NewRoutes(router *gin.Engine, cfg *config.Env, baseHandler *initializer.Bas
 		MaxAge:           time.Duration(cfg.Cors.MaxAge) * time.Hour,
 	}
 
+	
 	// Apply globally or per group
 	router.Use(middleware.NewCorsMiddleware(corsCfg))
 

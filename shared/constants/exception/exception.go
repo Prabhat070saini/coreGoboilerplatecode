@@ -3,8 +3,8 @@ package exception
 import (
 	"net/http"
 
-	"github.com/example/testing/common/constants"
-	"github.com/example/testing/common/response"
+	"github.com/example/testing/shared/constants"
+	"github.com/example/testing/shared/response"
 	// "github.com/ge_verona/shared/"
 )
 
@@ -43,6 +43,7 @@ const (
 	FILE_TOO_LARGE                      = "FILE_TOO_LARGE"
 	FILE_MISSING                        = "FILE_MISSING"
 	FILE_READ_ERROR                     = "FILE_READ_ERROR"
+	PROTECTED_ROUTE                     = "PROTECTED_ROUTE"
 )
 
 var ErrorCodeErrorMessage = map[ErrorCode]response.Exception{
@@ -200,6 +201,11 @@ var ErrorCodeErrorMessage = map[ErrorCode]response.Exception{
 		Code:           http.StatusBadRequest,
 		Message:        "Error in reading the file",
 		HttpStatusCode: http.StatusBadRequest,
+	},
+	PROTECTED_ROUTE: {
+		Code:           http.StatusUnauthorized,
+		Message:        "This route is protected",
+		HttpStatusCode: http.StatusUnauthorized,
 	},
 }
 

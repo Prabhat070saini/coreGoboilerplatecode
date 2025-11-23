@@ -22,3 +22,25 @@ const (
 	InvalidTokenLogout        int = 602 //logout
 	ResetTokenInvalidOrExpire int = 603 //resetToken
 )
+
+
+
+
+type Roles string
+
+const (
+	SuperDoctor Roles = "MST002"
+	Doctor      Roles = "MST001"
+)
+
+
+
+
+type AccessTokenPayload struct {
+    Id    string   `json:"id"`
+    Roles []string `json:"roles"`
+}
+
+type RefreshTokenPayload struct {
+    Id string `json:"id"`
+}

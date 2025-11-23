@@ -2,10 +2,10 @@ package fileServiceAccess
 
 
 import (
-	httpClient "github.com/example/testing/common/lib/http"
+	httpClient "github.com/example/testing/shared/lib/http"
 	"github.com/example/testing/config"
-	"github.com/example/testing/shared/cache/cacheConfig"
-	fileSystem "github.com/example/testing/shared/fileSystem"
+	"github.com/example/testing/shared/clients/cache/cacheConfig"
+	fileSystem "github.com/example/testing/shared/clients/fileSystem"
 
 )
 
