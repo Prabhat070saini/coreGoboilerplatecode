@@ -13,17 +13,18 @@ const (
 
 type FileRoutes struct{}
 
-func NewFileRoutes(baseHandler *initializer.BaseHandler, routerGroup *gin.RouterGroup, middleware *middleware.Middlewares) *FileRoutes {
+func NewFileRoutes(baseHandler *initializer.BaseHandler, public *gin.RouterGroup, protected *gin.RouterGroup, middleware *middleware.Middlewares) *FileRoutes {
+	protectedFile := protected.Group(FileGroupPrefix)
 
-	routerGroup.POST(
-		FileGroupPrefix+"/upload",
+	protectedFile.POST(
+		"/upload",
 		middleware.AuthMiddleware.AuthMiddleware(),
 		middleware.PermissionMiddleware.PermissionMiddleware(constants.SuperDoctor, constants.Doctor),
 		middleware.ContextInjectorMethods.InjectContext(baseHandler.FileHandler.UploadFile),
 	)
 
-	routerGroup.GET(
-		FileGroupPrefix+"/fetch",
+	protectedFile.GET(
+		"/fetch",
 		middleware.ContextInjectorMethods.InjectContext(baseHandler.FileHandler.FetchFile),
 	)
 

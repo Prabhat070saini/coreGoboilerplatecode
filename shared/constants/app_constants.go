@@ -44,3 +44,12 @@ type AccessTokenPayload struct {
 type RefreshTokenPayload struct {
     Id string `json:"id"`
 }
+
+
+// Cookie expiry
+const (
+ ShortAge int = 3600                     // 1 hour for access token
+ LongAge int = 7 * 24 * 60 * 60          // 7 days for refresh token
+)
+
+const SkipAPIKeyCheck = "skip_api_key"

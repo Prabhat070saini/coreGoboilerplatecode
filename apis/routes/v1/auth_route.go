@@ -14,10 +14,10 @@ const (
 type AuthRoutes struct {
 }
 
-func NewAuthRoutes(baseHandler *initializer.BaseHandler, routerGroup *gin.RouterGroup, middleware *middleware.Middlewares) *AuthRoutes {
-	authGroup := routerGroup.Group(authBasePath)
-	authGroup.POST("/login", middleware.ContextInjectorMethods.InjectContext(baseHandler.AuthHandler.Login))
-	authGroup.POST("/forgot-password", func(c *gin.Context) {
+func NewAuthRoutes(baseHandler *initializer.BaseHandler, public *gin.RouterGroup, protected *gin.RouterGroup, middleware *middleware.Middlewares) *AuthRoutes {
+	protectedAuth := protected.Group(authBasePath)
+	protectedAuth.POST("/login", middleware.ContextInjectorMethods.InjectContext(baseHandler.AuthHandler.Login))
+	protectedAuth.POST("/forgot-password", func(c *gin.Context) {
 		logger.Debug(c.Request.Context(), "checking the value in the value")
 		c.JSON(200, gin.H{"message": "pong"})
 	})

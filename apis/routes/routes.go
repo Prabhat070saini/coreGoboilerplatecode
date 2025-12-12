@@ -14,12 +14,6 @@ import (
 type Routes struct{}
 
 func NewRoutes(router *gin.Engine, cfg *config.Env, baseHandler *initializer.BaseHandler, middlewares *middleware.Middlewares) {
-
-	apiKeyCfg := &middleware.Config{
-		APIKey: cfg.ApiKey,
-	}
-	apiKeyMiddleware := middleware.NewApiMiddleware(apiKeyCfg)
-
 	corsCfg := &middleware.CorsConfig{
 		Env:              cfg.AppEnv,
 		AllowOrigins:     cfg.Cors.AllowOrigins,
@@ -31,20 +25,20 @@ func NewRoutes(router *gin.Engine, cfg *config.Env, baseHandler *initializer.Bas
 	}
 
 	
-	// Apply globally or per group
+	// Apply globally 
 	router.Use(middleware.NewCorsMiddleware(corsCfg))
 
-	appRoutes := router.Group("/api/your-service")
-	appRoutes.Use(apiKeyMiddleware.Handler())
 
-	appRoutes.GET("/ping", func(c *gin.Context) {
+	root := router.Group("/api/auth-service")
+	public := root.Group("/")
+	protected := root.Group("/")
+	protected.Use(middlewares.ApiKeyMiddleware.Handler())
+
+	public.GET("/ping", func(c *gin.Context) {
 		logger.Debug(c.Request.Context(), "checking the value in the value")
 		c.JSON(200, gin.H{"message": "pong"})
 	})
 
-	// -------------------------------
-	// 5️⃣  Example for future modular routes
-	// -------------------------------
-	v1.NewAuthRoutes(baseHandler, appRoutes, middlewares)
-	v1.NewFileRoutes(baseHandler, appRoutes, middlewares)
+	v1.NewAuthRoutes(baseHandler, public, protected, middlewares)
+	v1.NewFileRoutes(baseHandler, public, protected, middlewares)
 }
