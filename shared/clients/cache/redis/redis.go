@@ -30,23 +30,40 @@ func NewRedisCache(cfg *cacheConfig.Config) (cacheConfig.Cache, error) {
 	return &redisCache{client: rdb}, nil
 }
 
-// Implement Cache interface
-func (r *redisCache) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error {
+/*
+	Set → stores value WITHOUT expiration
+*/
+func (r *redisCache) Set(ctx context.Context, key string, value interface{}) error {
+	return r.client.Set(ctx, key, value, 0).Err()
+}
+
+/*
+	SetWithExp → stores value WITH expiration (TTL)
+*/
+func (r *redisCache) SetWithExp(
+	ctx context.Context,
+	key string,
+	value interface{},
+	expiration time.Duration,
+) error {
 	return r.client.Set(ctx, key, value, expiration).Err()
 }
+
 func (r *redisCache) Get(ctx context.Context, key string) (string, error) {
 	return r.client.Get(ctx, key).Result()
 }
+
 func (r *redisCache) Delete(ctx context.Context, key string) error {
 	return r.client.Del(ctx, key).Err()
 }
+
 func (r *redisCache) Exists(ctx context.Context, key string) (bool, error) {
-	val, err := r.client.Exists(ctx, key).Result()
-	return val > 0, err
+	count, err := r.client.Exists(ctx, key).Result()
+	return count > 0, err
 }
+
 func (r *redisCache) Close() error {
-	err := r.client.Close()
-	if err != nil {
+	if err := r.client.Close(); err != nil {
 		return err
 	}
 	fmt.Println("Redis cache closed successfully")

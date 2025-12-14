@@ -30,15 +30,17 @@ func NewRoutes(router *gin.Engine, cfg *config.Env, baseHandler *initializer.Bas
 
 
 	root := router.Group("/api/auth-service")
-	public := root.Group("/")
-	protected := root.Group("/")
-	protected.Use(middlewares.ApiKeyMiddleware.Handler())
+	// not need api key
+	openRouter := root.Group("/")
+	// need api key
+	privateRouter := root.Group("/")
+	privateRouter.Use(middlewares.ApiKeyMiddleware.Handler())
 
-	public.GET("/ping", func(c *gin.Context) {
+	openRouter.GET("/ping", func(c *gin.Context) {
 		logger.Debug(c.Request.Context(), "checking the value in the value")
 		c.JSON(200, gin.H{"message": "pong"})
 	})
 
-	v1.NewAuthRoutes(baseHandler, public, protected, middlewares)
-	v1.NewFileRoutes(baseHandler, public, protected, middlewares)
+	v1.NewAuthRoutes(baseHandler, privateRouter, middlewares)
+	v1.NewFileRoutes(baseHandler, privateRouter, middlewares)
 }

@@ -14,6 +14,7 @@ type Middlewares struct {
 	PermissionMiddleware   PermissionMiddlewareMethods
 	ContextInjectorMethods ContextInjectorMethods
 	ApiKeyMiddleware       ApiKeyMiddlewareMethods
+	RateLimitingMiddleware   RateLimitingMiddlewareMethods
 }
 
 type MiddlewareAccess struct {
@@ -35,6 +36,7 @@ func NewMiddlewares(cfg *config.Env, cacheService cacheConfig.Cache) *Middleware
 		PermissionMiddleware:   NewPermissionMiddleware(access),
 		ContextInjectorMethods: NewRequestCtxMiddleware(),
 		ApiKeyMiddleware:       NewApiMiddleware(apiKeyCfg),
+		RateLimitingMiddleware: NewRateLimitingMiddleware(),
 	}
 }
 

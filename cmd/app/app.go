@@ -148,7 +148,7 @@ func (a *App) registerRoutes() {
 	// Example route
 	a.router.GET("/health", func(c *gin.Context) {
 		logger.Debug(c.Request.Context(), "health")
-		a.cacheService.Set(context.Background(), "greeting:valuechecking", "Hello Prabhat", 10*time.Second)
+		// a.cacheService.Set(context.Background(), "greeting:valuechecking", "Hello Prabhat", 10*time.Second)
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 }

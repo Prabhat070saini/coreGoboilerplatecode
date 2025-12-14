@@ -14,8 +14,8 @@ const (
 type AuthRoutes struct {
 }
 
-func NewAuthRoutes(baseHandler *initializer.BaseHandler, public *gin.RouterGroup, protected *gin.RouterGroup, middleware *middleware.Middlewares) *AuthRoutes {
-	protectedAuth := protected.Group(authBasePath)
+func NewAuthRoutes(baseHandler *initializer.BaseHandler, router *gin.RouterGroup, middleware *middleware.Middlewares) *AuthRoutes {
+	protectedAuth := router.Group(authBasePath)
 	protectedAuth.POST("/login", middleware.ContextInjectorMethods.InjectContext(baseHandler.AuthHandler.Login))
 	protectedAuth.POST("/forgot-password", func(c *gin.Context) {
 		logger.Debug(c.Request.Context(), "checking the value in the value")

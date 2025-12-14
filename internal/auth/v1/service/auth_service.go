@@ -103,11 +103,11 @@ func (s *authService) Login(ctx context.Context, payload *dto.LoginDto, ip *stri
 
 	refreshRedisKey := fmt.Sprintf(constants.LoginRefreshTokenRedisKey, getUserOutput.Data.UUID)
 
-	redisErr := s.access.CacheService.Set(ctx, accessRedisKey, accessToken, time.Minute*time.Duration(s.access.Config.JWT.AccessTokenExpiryMin))
+	redisErr := s.access.CacheService.SetWithExp(ctx, accessRedisKey, accessToken, time.Minute*time.Duration(s.access.Config.JWT.AccessTokenExpiryMin))
 	if redisErr != nil {
 		return utils.ServiceError[*LoginResponse](exception.INTERNAL_SERVER_ERROR)
 	}
-	redisErr = s.access.CacheService.Set(ctx, refreshRedisKey, refreshToken, time.Minute*time.Duration(s.access.Config.JWT.RefreshTokenExpiryMin))
+	redisErr = s.access.CacheService.SetWithExp(ctx, refreshRedisKey, refreshToken, time.Minute*time.Duration(s.access.Config.JWT.RefreshTokenExpiryMin))
 	if redisErr != nil {
 		return utils.ServiceError[*LoginResponse](exception.INTERNAL_SERVER_ERROR)
 	}

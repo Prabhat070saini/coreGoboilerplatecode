@@ -81,7 +81,7 @@ func (m *authMiddleware) AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 		if roles, exists := payload["roles"]; exists {
-			c.Set("roles", toStringSlice(roles)) // 🔥 always []string
+			c.Set("roles", toStringSlice(roles)) // always []string
 		}
 		c.Set("userId", userId)
 

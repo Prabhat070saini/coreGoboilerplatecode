@@ -13,8 +13,8 @@ const (
 
 type FileRoutes struct{}
 
-func NewFileRoutes(baseHandler *initializer.BaseHandler, public *gin.RouterGroup, protected *gin.RouterGroup, middleware *middleware.Middlewares) *FileRoutes {
-	protectedFile := protected.Group(FileGroupPrefix)
+func NewFileRoutes(baseHandler *initializer.BaseHandler,router *gin.RouterGroup, middleware *middleware.Middlewares) *FileRoutes {
+	protectedFile := router.Group(FileGroupPrefix)
 
 	protectedFile.POST(
 		"/upload",
