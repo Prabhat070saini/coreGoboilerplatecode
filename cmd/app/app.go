@@ -157,8 +157,9 @@ func (a *App) Run() {
 	// Start Gin HTTP server
 	go func() {
 		logger.Info(context.Background(), "starting HTTP server", zap.String("addr", a.server.Addr))
+		fmt.Printf("Starting application... http://localhost:%d",a.cfg.Port)
 		if err := a.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			logger.Fatal(context.Background(), "HTTP server error", zap.Error(err))
+			logger.Error(context.Background(), "HTTP server error", zap.Error(err))
 		}
 	}()
 
