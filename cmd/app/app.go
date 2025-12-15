@@ -60,7 +60,7 @@ func (a *App) initialize() {
 		RequestIDKey:     constants.RequestIDKey,
 	})
 
-	// Connect to the database
+	// Connect to the database 
 	dbConnection, err := database.NewDBConnection(&database.PGConfig{
 		Host:                   a.cfg.DB.Host,
 		Port:                   a.cfg.DB.Port,

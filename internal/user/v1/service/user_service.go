@@ -2,11 +2,12 @@ package userService
 
 import (
 	"context"
+	"net/http"
 
-	"github.com/example/testing/shared/response"
-	"github.com/example/testing/shared/utils"
 	"github.com/example/testing/internal/user/models"
 	userRepository "github.com/example/testing/internal/user/repository"
+	"github.com/example/testing/shared/response"
+	"github.com/example/testing/shared/utils"
 	"gorm.io/gorm"
 )
 
@@ -58,9 +59,9 @@ func (s *userService) GetUserEmail(ctx context.Context, email string, selectFiel
 
 		return response.ServiceOutput[*models.Users]{
 			Success: &response.Success[*models.Users]{
-				Code:           200,
+				Code:           http.StatusOK,
 				Message:        "User fetched successfully",
-				HttpStatusCode: 200,
+				HttpStatusCode: http.StatusOK,
 				Data:           output.Data,
 			},
 		}

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	// "database/sql"
 	"fmt"
 	"net/http"
 
@@ -24,6 +25,7 @@ func GetTx(ctx context.Context) *gorm.DB {
 type TxFunc[T any] func(ctx context.Context, tx *gorm.DB) response.ServiceOutput[T]
 
 func WithTransaction[T any](db *gorm.DB, ctx context.Context, fn TxFunc[T]) response.ServiceOutput[T] {
+	// you also pass isolation table in Begin(&sql.TxOptions{Isolation: sql.LevelSerializable})
 	tx := db.Begin()
 	if tx.Error != nil {
 		return response.ServiceOutput[T]{
