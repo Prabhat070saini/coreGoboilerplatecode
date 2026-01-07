@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/go-playground/validator/v10"
@@ -42,7 +43,7 @@ type LogConfig struct {
 // RedisConfig
 type CacheConfig struct {
 	Addr     string `mapstructure:"addr" validate:"required"`
-	Password string `mapstructure:"password" validate:"required"`
+	Password string `mapstructure:"password"`
 	Db       int    `mapstructure:"db"`
 	Driver   string `mapstructure:"driver" validate:"required"`
 }
@@ -119,6 +120,9 @@ func LoadConfig() (*Env, error) {
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath("./config")
+
+		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+		viper.AutomaticEnv()
 
 		if err := viper.ReadInConfig(); err != nil {
 			loadErr = fmt.Errorf("could not read config file: %w", err)

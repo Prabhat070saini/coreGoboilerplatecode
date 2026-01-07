@@ -64,7 +64,10 @@ func Initialize(provider ProviderType, cfg any) (*FileService, error) {
 // GetInstance returns singleton
 func GetInstance() *FileService {
 	if instance == nil {
-		log.Fatal("[FileService] Service not initialized. Call Initialize first.")
+		// FIXME: uncomment below line if you want to throw error or want service not to be initialized without file system
+		// log.Fatal("[FileService] Service not initialized. Call Initialize first.")
+		log.Println("[FileService] Service not initialized. Call Initialize first.")
+		return nil
 	}
 	return instance
 }

@@ -1,91 +1,131 @@
-ApiKey: "your-api-key-here"
-AppName: "MyApp"
-AppVersion: "1.0.0"
-BaseUrl: "http://localhost:8080"
-Environment: "development" # development, staging, uat, prod
-ServerPort: 8080
+# ===============================
+# Application Configuration
+# ===============================
+server:
+  port: 3001
+  name: boilerplate-code
+  version: "0.0.1"
+  base_url: "http://localhost:3000"
+  environment: development # development | staging | uat | prod
+  api_key: ${APP_API_KEY} # required for internal auth
 
-db:
-  driver: "postgres"
-  host: "localhost"
+# ===============================
+# Database Configuration
+# ===============================
+database:
+  driver: postgres
+  host: localhost
   port: 5432
-  user: "postgres"
-  password: "password"
-  db_name: "myapp_db"
-  max_idle_connection: 10
-  max_open_connection: 100
-  conn_max_lifetime_minutes: 30
-  logging: "true"
-  ssl_mode: "disable"
+  username: ${DB_USER}
+  password: ${DB_PASSWORD}
+  name: ge_verona
+  pool:
+    max_idle_connections: 10
+    max_open_connections: 50
+    connection_max_lifetime_minutes: 30
+  logging: true
+  ssl_mode: disable
 
+# ===============================
+# JWT Configuration
+# ===============================
 jwt:
-  access_token_expiry_min: 15
-  refresh_token_expiry_min: 1440
-  access_token_secret: "your-access-secret"
-  refresh_token_secret: "your-refresh-secret"
+  access_token:
+    expiry_minutes: 5
+    secret: ${JWT_ACCESS_SECRET}
+  refresh_token:
+    expiry_minutes: 24
+    secret: ${JWT_REFRESH_SECRET}
 
+# ===============================
+# Logging Configuration
+# ===============================
 log:
-  level: "debug" # debug, info, warn, error
-  format: "json" # console, json
+  level: info # debug | info | warn | error
+  format: console # console | json
   enable_caller: true
   enable_stacktrace: false
 
+# ===============================
+# Cache / Redis Configuration
+# ===============================
 cache:
-  driver: "redis"
-  addr: "localhost:6379"
-  password: ""
-  db: 0
-  REDIS_CONNECTION_LIMIT: 50
-  USE_REDIS: true
+  enabled: false
+  driver: redis
+  redis:
+    address: localhost:6379
+    password: ${REDIS_PASSWORD}
+    db: 0
+    max_connections: 50
 
+# ===============================
+# AWS Configuration
+# ===============================
 aws:
-  aws_region: "ap-south-1"
-  aws_access_key_id: "your-access-key"
-  aws_secret_access_key: "your-secret-key"
-  aws_s3_bucket_name: "your-bucket-name"
-  aws_signed_url_expiry: 3600 # seconds
-  max_file_size: 52428800 #50MB
+  region: us-east-1
+  credentials:
+    access_key_id: ${AWS_ACCESS_KEY_ID}
+    secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+  s3:
+    bucket_name: testing-taiservices
+    signed_url_expiry_seconds: 3600
+    max_file_size_bytes: 52428800 # 50MB
 
+# ===============================
+# CORS Configuration
+# ===============================
 cors:
   allow_origins:
-    - "http://localhost:3000"
-    - "http://localhost:5173"
-    - "http://127.0.0.1:5500"
-    - "http://localhost:5500"
+    - http://localhost:5173
+    - http://localhost:3000
+    - http://127.0.0.1:5500
+    - http://localhost:5500
   allow_methods:
-    - "GET"
-    - "POST"
-    - "PUT"
-    - "DELETE"
-    - "OPTIONS"
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
   allow_headers:
-    - "Origin"
-    - "Content-Type"
-    - "Accept"
-    - "Authorization"
-    - "x-api-key"
-    - "reset-token"
-    - "refresh-token"
+    - Origin
+    - Content-Type
+    - Accept
+    - Authorization
+    - x-api-key
+    - reset-token
+    - refresh-token
   expose_headers:
-    - "Content-Length"
+    - Content-Length
   allow_credentials: true
   max_age_hours: 12
 
+# ===============================
+# Email / SMTP Configuration
+# ===============================
 email:
-  host: "smtp.gmail.com"
-  port: 587
-  username: "your-email@gmail.com"
-  password: "your-email-password"
-  from: "no-reply@myapp.com"
-  provider: "smtp"
+  provider: smtp
+  host: smtp.gmail.com
+  port: 465
+  username: ${SMTP_USERNAME}
+  password: ${SMTP_PASSWORD}
+  from: info@binmile.com
 
-service_base_url:
-  communication_service: "http://localhost:5000"
+# ===============================
+# External Service URLs
+# ===============================
+services:
+  communication_service:
+    base_url: http://3.109.216.121:3002/communication-service
 
+# ===============================
+# Password Reset Configuration
+# ===============================
 password_reset:
-  reset_link: "http://localhost:3000/reset-password"
-  reset_link_expiry_min: 30
+  reset_link_base_url: "http://15.206.117.252:3000/reset-password/"
+  expiry_minutes: 5
 
+# ===============================
+# Crypto Configuration
+# ===============================
 crypto:
-  aes_key: "your-32-byte-aes-key-here"
-
+  aes_key: ${AES_SECRET_KEY}

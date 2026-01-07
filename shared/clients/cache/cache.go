@@ -2,6 +2,7 @@ package cache
 
 import (
 	"fmt"
+	"log"
 	"sync"
 
 	"github.com/example/testing/shared/clients/cache/cacheConfig"
@@ -31,7 +32,7 @@ func Init(cfg *cacheConfig.Config) (cacheConfig.Cache, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Your", cfg.Driver, "Cache connected successfully")
+	log.Println("Your", cfg.Driver, "Cache connected successfully")
 	return instance, nil
 }
 

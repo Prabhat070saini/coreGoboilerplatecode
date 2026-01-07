@@ -6,16 +6,16 @@ BaseUrl: "http://localhost:3000"
 Environment: development # development, stagging, uat, prod
 db:
   driver: postgres
-  host: localhost
+  host: ep-bitter-smoke-ahqj1qc2-pooler.c-3.us-east-1.aws.neon.tech
   port: 5432
-  user: prabhat
-  password: "prabhat"
-  db_name: ge_verona
+  user: neondb_owner
+  password: "npg_TKBFpSVsr6Q3"
+  db_name: goDocker
   max_idle_connection: 10
   max_open_connection: 50
   conn_max_lifetime_minutes: 30
   logging: "true"
-  ssl_mode: "disable"
+  ssl_mode: "require"
 jwt:
   access_token_expiry_min: 5
   refresh_token_expiry_min: 24

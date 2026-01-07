@@ -115,7 +115,8 @@ func (a *App) initialize() {
 
 	_, fileErr := fileSystem.Initialize(fileSystem.S3, s3Cfg)
 	if fileErr != nil {
-		panic(fileErr)
+		// panic(fileErr)
+		logger.Info(context.Background(), "file service initialization failed", zap.Error(fileErr))
 	}
 
 	fs := fileSystem.GetInstance()

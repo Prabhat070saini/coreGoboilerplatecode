@@ -76,6 +76,7 @@ func PingDBConnection(db *gorm.DB) error {
 	if err != nil {
 		return err
 	}
+	log.Println("✅ DB connection pinged successfully")
 	return sqlDB.Ping()
 }
 
