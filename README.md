@@ -184,3 +184,11 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ---
 
 _Built with ❤️ by [Prabhat Saini](https://github.com/Prabhat070saini)_
+<div align="center">
+
+**⭐ If you find this project helpful, please give it a star!**
+
+Made with ❤️ by [Prabhat Saini](https://github.com/Prabhat070saini)
+
+</div>
+
